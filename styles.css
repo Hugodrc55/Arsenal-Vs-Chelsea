@@ -1,0 +1,103 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to right, #c80d0d, #0418c8);
+    font-family: Arial, sans-serif;
+}
+#game-container {
+    width: 800px;
+    height: 400px;
+    background-color: #4CAF50;
+    position: relative;
+    overflow: hidden;
+    border: 5px solid white;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+.player {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+}
+#player1 {
+    background-image: url('https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg');
+}
+#player2 {
+    background-image: url('https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg');
+}
+#ball {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="white" stroke="black" stroke-width="1"/><path d="M50 10 L90 30 L80 75 H20 L10 30 Z" fill="black"/><path d="M50 10 L10 30 M90 30 L80 75 M20 75 L50 90 L80 75" fill="none" stroke="black" stroke-width="1"/><path d="M50 90 L20 75 L10 30 M50 90 L80 75 L90 30" fill="none" stroke="black" stroke-width="1"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.goal {
+    width: 10px;
+    height: 100px;
+    background-color: white;
+    position: absolute;
+    top: 150px;
+}
+#goal1 { left: 0; }
+#goal2 { right: 0; }
+#score {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+#instructions {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+#goal-animation {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    color: #FFD700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+#winner-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    color: #FFD700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0.7);
+    padding: 20px;
+    border-radius: 10px;
+    display: none;
+}
+
+#credits{
+    position: relative;
+
+}
+
+#me{
+    position:absolute;
+    top: 300px;
+    left: 250px;
+}
