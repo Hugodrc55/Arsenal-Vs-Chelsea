@@ -1,4 +1,4 @@
-const player1 = document.getElementById('player1');
+        const player1 = document.getElementById('player1');
         const player2 = document.getElementById('player2');
         const ball = document.getElementById('ball');
         const scoreElement = document.getElementById('score');
@@ -13,6 +13,9 @@ const player1 = document.getElementById('player1');
         const FRICTION = 0.98;
         const RESTITUTION = 0.8;
         const WINNING_SCORE = 3;
+        const MAX_SPEED = 4;
+        const ACCELERATION = 0.4;
+        const DECELERATION = 0.2;
 
         class Entity {
             constructor(element, x, y, radius, mass) {
@@ -66,28 +69,87 @@ const player1 = document.getElementById('player1');
         const ballEntity = new Entity(ball, 400, 200, BALL_RADIUS, BALL_MASS);
         let ballRotation = 0;
 
+        const keys = {
+            player1: { up: false, down: false, left: false, right: false },
+            player2: { up: false, down: false, left: false, right: false }
+        };
+
         document.addEventListener('keydown', (e) => {
-            const speed = 2;
             switch(e.key) {
-                case 'z': players[0].velocity.y = speed; break;
-                case 's': players[0].velocity.y = -speed; break;
-                case 'q': players[0].velocity.x = -speed; break;
-                case 'd': players[0].velocity.x = speed; break;
-                case 'ArrowUp': players[1].velocity.y = speed; break;
-                case 'ArrowDown': players[1].velocity.y = -speed; break;
-                case 'ArrowLeft': players[1].velocity.x = -speed; break;
-                case 'ArrowRight': players[1].velocity.x = speed; break;
+                case 'z': keys.player1.up = true; break;
+                case 's': keys.player1.down = true; break;
+                case 'q': keys.player1.left = true; break;
+                case 'd': keys.player1.right = true; break;
+                case 'ArrowUp': keys.player2.up = true; break;
+                case 'ArrowDown': keys.player2.down = true; break;
+                case 'ArrowLeft': keys.player2.left = true; break;
+                case 'ArrowRight': keys.player2.right = true; break;
             }
         });
 
         document.addEventListener('keyup', (e) => {
             switch(e.key) {
-                case 'z': case 's': players[0].velocity.y = 0; break;
-                case 'q': case 'd': players[0].velocity.x = 0; break;
-                case 'ArrowUp': case 'ArrowDown': players[1].velocity.y = 0; break;
-                case 'ArrowLeft': case 'ArrowRight': players[1].velocity.x = 0; break;
+                case 'z': keys.player1.up = false; break;
+                case 's': keys.player1.down = false; break;
+                case 'q': keys.player1.left = false; break;
+                case 'd': keys.player1.right = false; break;
+                case 'ArrowUp': keys.player2.up = false; break;
+                case 'ArrowDown': keys.player2.down = false; break;
+                case 'ArrowLeft': keys.player2.left = false; break;
+                case 'ArrowRight': keys.player2.right = false; break;
             }
         });
+
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'Z': keys.player1.up = true; break;
+                case 'S': keys.player1.down = true; break;
+                case 'Q': keys.player1.left = true; break;
+                case 'D': keys.player1.right = true; break;
+                case 'ArrowUp': keys.player2.up = true; break;
+                case 'ArrowDown': keys.player2.down = true; break;
+                case 'ArrowLeft': keys.player2.left = true; break;
+                case 'ArrowRight': keys.player2.right = true; break;
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            switch(e.key) {
+                case 'Z': keys.player1.up = false; break;
+                case 'S': keys.player1.down = false; break;
+                case 'Q': keys.player1.left = false; break;
+                case 'D': keys.player1.right = false; break;
+                case 'ArrowUp': keys.player2.up = false; break;
+                case 'ArrowDown': keys.player2.down = false; break;
+                case 'ArrowLeft': keys.player2.left = false; break;
+                case 'ArrowRight': keys.player2.right = false; break;
+            }
+        });
+
+        function updatePlayerMovement() {
+            players.forEach((player, index) => {
+                const playerKeys = index === 0 ? keys.player1 : keys.player2;
+                
+                if (playerKeys.up) player.velocity.y += ACCELERATION;
+                if (playerKeys.down) player.velocity.y -= ACCELERATION;
+                if (playerKeys.left) player.velocity.x -= ACCELERATION;
+                if (playerKeys.right) player.velocity.x += ACCELERATION;
+
+                if (!playerKeys.up && !playerKeys.down) {
+                    player.velocity.y *= 1 - DECELERATION;
+                }
+                if (!playerKeys.left && !playerKeys.right) {
+                    player.velocity.x *= 1 - DECELERATION;
+                }
+
+                const speed = Math.sqrt(player.velocity.x ** 2 + player.velocity.y ** 2);
+                if (speed > MAX_SPEED) {
+                    const ratio = MAX_SPEED / speed;
+                    player.velocity.x *= ratio;
+                    player.velocity.y *= ratio;
+                }
+            });
+        }
 
         function checkCollision(entity1, entity2) {
             const dx = entity1.position.x - entity2.position.x;
@@ -180,6 +242,8 @@ const player1 = document.getElementById('player1');
         }
 
         function gameLoop() {
+            updatePlayerMovement();
+            
             players.forEach(player => {
                 player.update();
                 player.applyFriction();
